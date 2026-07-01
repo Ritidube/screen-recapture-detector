@@ -1,8 +1,13 @@
 # Spot the Fake Photo — Approach Note
 
+
 ## What I did
 
 I used classical computer vision techniques instead of training a deep neural network, since the dataset was small and the assignment allowed traditional methods as well. The system combines 8 different signals commonly used in recapture and screen-detection tasks: wavelet sub-band statistics, FFT-based moiré patterns, LBP texture, noise residuals, chromatic aberration near edges, sharpness and blur statistics, glare and highlight features, and color-space statistics. These are merged into a 194-dimensional feature vector for each image. The same feature extraction pipeline is used consistently in the notebook, prediction script, and Streamlit demo to avoid mismatch. For efficiency, texture and frequency features are computed on a larger 384 px image, while color and glare features are extracted from a 200 px thumbnail. The final model uses StandardScaler followed by SelectKBest and Logistic Regression. I also tested RBF SVM and Random Forest, but Logistic Regression gave the best cross-validation performance, so I selected it for the final system.
+
+## Architecture
+ 
+![Architecture diagram](assets\architecture.jpeg)
 
 ## Accuracy
 
