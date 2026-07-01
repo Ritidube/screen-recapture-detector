@@ -7,7 +7,7 @@ I used classical computer vision techniques instead of training a deep neural ne
 
 ## Architecture
  
-![Architecture diagram](assets\architecture.jpeg)
+![Architecture diagram](assets/architecture.jpeg)
 
 ## Accuracy
 
