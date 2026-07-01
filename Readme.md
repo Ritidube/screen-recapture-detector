@@ -5,14 +5,7 @@
 
 I used classical computer vision techniques instead of training a deep neural network, since the dataset was small and the assignment allowed traditional methods as well. The system combines 8 different signals commonly used in recapture and screen-detection tasks: wavelet sub-band statistics, FFT-based moiré patterns, LBP texture, noise residuals, chromatic aberration near edges, sharpness and blur statistics, glare and highlight features, and color-space statistics. These are merged into a 194-dimensional feature vector for each image. The same feature extraction pipeline is used consistently in the notebook, prediction script, and Streamlit demo to avoid mismatch. For efficiency, texture and frequency features are computed on a larger 384 px image, while color and glare features are extracted from a 200 px thumbnail. The final model uses StandardScaler followed by SelectKBest and Logistic Regression. I also tested RBF SVM and Random Forest, but Logistic Regression gave the best cross-validation performance, so I selected it for the final system.
 
-## Architecture
- 
-<!-- ![Architecture diagram](assets/architecture.jpeg) -->
-## Architecture
 
-<p align="center">
-  <img src="assets/architecture.jpeg" alt="Architecture Diagram" width="600">
-</p>
 
 ## Accuracy
 
@@ -25,3 +18,10 @@ The average inference time was around 150–180 ms per image on Colab CPU in a s
 ## What I would improve
 
 The main limitation of this project is the small dataset size. With more images from different screens, devices, and lighting conditions, the model would likely become more robust. I would also test the system on completely unseen screens and devices instead of relying only on cross-validation. In addition, gradient boosting methods such as XGBoost or LightGBM could be explored to capture feature interactions better than a linear model.
+
+## Architecture
+
+
+<p align="center">
+  <img src="assets/architecture.jpeg" alt="Architecture Diagram" width="600">
+</p>
