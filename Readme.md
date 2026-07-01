@@ -7,7 +7,12 @@ I used classical computer vision techniques instead of training a deep neural ne
 
 ## Architecture
  
-![Architecture diagram](assets/architecture.jpeg)
+<!-- ![Architecture diagram](assets/architecture.jpeg) -->
+## Architecture
+
+<p align="center">
+  <img src="assets/architecture.jpeg" alt="Architecture Diagram" width="600">
+</p>
 
 ## Accuracy
 
