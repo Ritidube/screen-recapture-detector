@@ -1,23 +1,47 @@
-# Spot the Fake Photo — Approach Note
+# Spot the Fake Photo (Approach Note)
+
 
 
 ## What I did
 
-I used classical computer vision techniques instead of training a deep neural network, since the dataset was small and the assignment allowed traditional methods as well. The system combines 8 different signals commonly used in recapture and screen-detection tasks: wavelet sub-band statistics, FFT-based moiré patterns, LBP texture, noise residuals, chromatic aberration near edges, sharpness and blur statistics, glare and highlight features, and color-space statistics. These are merged into a 194-dimensional feature vector for each image. The same feature extraction pipeline is used consistently in the notebook, prediction script, and Streamlit demo to avoid mismatch. For efficiency, texture and frequency features are computed on a larger 384 px image, while color and glare features are extracted from a 200 px thumbnail. The final model uses StandardScaler followed by SelectKBest and Logistic Regression. I also tested RBF SVM and Random Forest, but Logistic Regression gave the best cross-validation performance, so I selected it for the final system.
-
-
+- Used classical computer vision techniques instead of a deep neural network — dataset was small, and the assignment allowed traditional methods too.
+- Combined 8 signals commonly used in recapture/screen-detection tasks:
+  - Wavelet sub-band statistics
+  - FFT-based moiré patterns
+  - LBP texture
+  - Noise residuals
+  - Chromatic aberration near edges
+  - Sharpness and blur statistics
+  - Glare and highlight features
+  - Color-space statistics
+- Merged all 8 signals into a 194-dimensional feature vector per image.
+- Same feature extraction pipeline (`features.py`) used consistently in the notebook, `predict.py`, and the Streamlit demo — avoids any mismatch between training and inference.
+- Texture/frequency features computed on a larger 384px image; color/glare features extracted from a 200px thumbnail, for speed.
+- Final model: StandardScaler → SelectKBest → Logistic Regression.
+- Also tested RBF SVM and Random Forest — Logistic Regression won on cross-validation performance, so that's what shipped.
 
 ## Accuracy
 
-The dataset used for experimentation contained 100 images: 50 real photos and 50 screen recaptures collected using a phone under different lighting conditions, angles, and screens. The model achieved 90% 5-fold cross-validation accuracy and 0.955 ROC-AUC. The confusion matrix was balanced, with 45 out of 50 real images and 45 out of 50 screen images classified correctly. A train accuracy of 93% was also observed, but that is not the reported performance because it was measured on data the model had already seen. The 90% cross-validation result is the more reliable metric. Since the dataset is small, the result may still vary slightly with more data.
+- Dataset: 100 images — 50 real photos, 50 screen recaptures, self-collected with varied lighting, angles, and screens.
+- 5-fold cross-validation accuracy: **90%**
+- ROC-AUC: **0.955**
+- Confusion matrix was balanced: 45/50 real and 45/50 screen classified correctly.
+- Train accuracy was 93%, but that's not the reported number — it's measured on data the model already saw.
+- 90% CV accuracy is the honest, reliable metric.
+- Small dataset means this number could shift a bit with more data.
 
 ## Latency & Cost
 
-The average inference time was around 150–180 ms per image on Colab CPU in a single-threaded setup, including image loading. The median time was slightly lower depending on the run. Since the solution is based on lightweight numerical operations rather than a heavy deep learning model, it can run efficiently on a local system or mobile device without requiring a GPU. If deployed on a server, the compute cost would remain low because no model download or network call is needed.
+- Average inference time: ~150–180 ms per image on Colab CPU, single-threaded, including image loading.
+- Median time slightly lower, depending on the run.
+- Lightweight numerical operations (no deep learning) → runs efficiently on a local system or mobile device, no GPU needed.
+- If deployed on a server, compute cost stays low — no model download, no network call required per prediction.
 
 ## What I would improve
 
-The main limitation of this project is the small dataset size. With more images from different screens, devices, and lighting conditions, the model would likely become more robust. I would also test the system on completely unseen screens and devices instead of relying only on cross-validation. In addition, gradient boosting methods such as XGBoost or LightGBM could be explored to capture feature interactions better than a linear model.
+- Biggest limitation: small dataset size. More images across different screens, devices, and lighting would likely make the model more robust.
+- Test on completely unseen screens/devices instead of relying only on cross-validation.
+- Explore gradient boosting methods (XGBoost, LightGBM) to capture feature interactions a linear model might miss.
 
 ## Architecture
 
